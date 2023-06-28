@@ -1,27 +1,24 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react'
+import Cabecalho from './Cabecalho'
 import { Container } from 'react-bootstrap';
-import Cabecalho from './Cabecalho';
-import { Helmet } from 'react-helmet';
-
-
+import { RiHome2Line, RiNewsLine, RiUserLine, RiBuilding2Line } from 'react-icons/ri';
 
 const Pagina = (props) => {
 
     return (
         <>
-        <Helmet>
-        <title>POLÍTICA TRANSPARENTE  | Portal dos Deputados </title> {/* Defina o título desejado */}
-      </Helmet>
-            <Cabecalho/>
-            <div className='bg-white py-3 text-black text-left mb-2 mt-5'>
-                <Container>
-                    <h1>{props.titulo}</h1>
-                </Container>
+            <Cabecalho />
+            <div className='bg-light text-muted py-1 text-center mb-3'>
+           
+            <h1>{props.titulo}</h1>
             </div>
-            <Container>
+            
+            <Container className='mb-5'>
                 {props.children}
             </Container>
+
+         
         </>
     )
 }

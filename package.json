@@ -21,7 +21,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-helmet": "^6.1.0",
-    "react-icons": "^4.8.0",
+    "react-icons": "^4.10.1",
     "react-input-mask": "^2.0.4",
     "xlsx": "^0.16.9",
     "xlsx-populate": "^1.21.0"

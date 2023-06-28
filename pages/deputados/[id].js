@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Button, Card, Col, Row, Table } from 'react-bootstrap';
+import { Accordion, Button, Card, Col, Container, Row, Table } from 'react-bootstrap';
 import { RiFileExcel2Line } from 'react-icons/ri';
 import { BarController, BarElement, CategoryScale, Chart, LinearScale, Title, Tooltip } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
@@ -58,37 +58,51 @@ const Detalhes = ({ deputado, despesasDeputado }) => {
   return (
     <Pagina>
 
-      <Row>
-        <Col>
-          <Card.Img style={{ width: '300px' }} src={deputado.ultimoStatus.urlFoto} />
-        </Col>
-        <Col md={8}>
-          <Row md={2}>
-            <Card.Body>
-              <p><b>Nome: </b>{deputado.nomeCivil}</p>
-              <p><b>CPF: </b> {formatarCPF(deputado.cpf)}</p>
-              <p><b>Data de Nascimento: </b> {format(new Date(deputado.dataNascimento), 'dd/MM/yyyy')}</p>
-              <p><b>Naturalidade: </b>{deputado.municipioNascimento} - {deputado.ufNascimento}</p>
-              <p><b>Escolaridade: </b>{deputado.escolaridade}</p>
-              <p><b>Partido: </b>{deputado.ultimoStatus.siglaPartido}</p>
-              <p><b>Condição Eleitoral: </b>{deputado.ultimoStatus.condicaoEleitoral}</p>
-              <p><b>Situação: </b>{deputado.ultimoStatus.situacao}</p>
-            </Card.Body>
-            <Accordion eventKey="0">
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>Gabinete</Accordion.Header>
-                <Accordion.Body>
-                  <p><b>Número do gabinete: </b>{deputado.ultimoStatus.gabinete.nome}</p>
-                  <p><b>Predio: </b>{deputado.ultimoStatus.gabinete.predio}</p>
-                  <p><b>Sala: </b>{deputado.ultimoStatus.gabinete.sala}</p>
-                  <p><b>Andar: </b>{deputado.ultimoStatus.gabinete.andar}</p>
-                  <p><b>Telefone: </b>{deputado.ultimoStatus.gabinete.telefone}</p>
-                  <p><b>Email: </b>{deputado.ultimoStatus.gabinete.email}</p>
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-          </Row>
-        </Col>
+<Row>
+
+<Col md={3}>
+  <Card border="success" style={{ width: '16rem' }}>
+    <Card.Header className=' bg-success'></Card.Header>
+    <Card.Img variant="top" src={deputado.ultimoStatus.urlFoto} />
+
+
+  </Card>
+</Col>
+
+<Col md={9}> 
+  <Card border="success" style={{ width: '50rem' }}>
+  <Card.Header className=' bg-success'></Card.Header>
+  <Container>
+    <p><strong>Nome: {deputado.nomeCivil}</strong></p>
+    <p><strong>CPF: {deputado.cpf}</strong></p>
+    <p><strong>Data de Nascimento: {deputado.dataNascimento}</strong></p>
+    <p><strong>Naturalidade: {deputado.municipioNascimento} - {deputado.ufNascimento}</strong></p>
+    <p><strong>Escolaridade: {deputado.escolaridade}</strong></p>
+    <p><strong>Partido: {deputado.ultimoStatus.siglaPartido}</strong></p>
+    <p><strong>Condição Eleitoral: {deputado.ultimoStatus.condicaoEleitoral}</strong></p>
+    <p><strong>Situação: {deputado.ultimoStatus.situacao}</strong></p>
+    </Container>
+  </Card>
+</Col>
+</Row>
+<br></br>
+<Row md={2}>
+<Container>
+<Accordion eventKey="0" className='pt-1 bg-success  pb-10' >
+  <Accordion.Item eventKey="0" >
+    <Accordion.Header>Gabinete</Accordion.Header>
+    <Accordion.Body>
+      <p><strong>Nome: {deputado.ultimoStatus.gabinete.nome}</strong></p>
+      <p><strong>Predio: {deputado.ultimoStatus.gabinete.predio}</strong></p>
+      <p><strong>Sala: {deputado.ultimoStatus.gabinete.sala}</strong></p>
+      <p><strong>Andar: {deputado.ultimoStatus.gabinete.andar}</strong></p>
+      <p><strong>Telefone: {deputado.ultimoStatus.gabinete.telefone}</strong></p>
+      <p><strong>Email: {deputado.ultimoStatus.gabinete.email}</strong></p>
+    </Accordion.Body>
+  </Accordion.Item>
+</Accordion>
+</Container>
+
         <div className='mt-5 variant=center'>
           <Bar data={data} plugins={[{ plugin: Tooltip }]} /> {/* Adicione Tooltip */}
         </div>
@@ -122,7 +136,7 @@ const Detalhes = ({ deputado, despesasDeputado }) => {
               </Table>
               <div className='d-flex justify-content-center'>
                 <Button
-                  variant="outline-primary"
+                  variant="outline-success"
                   className='d-flex align-items-center'
                   onClick={exportarParaExcel}
                 >

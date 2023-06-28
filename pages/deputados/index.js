@@ -1,46 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Button, Card, Col, Dropdown, Form, Row } from 'react-bootstrap';
-import Pagina from "../../components/Pagina";
-import apiDeputados from '../../services/apiDeputados';
+import Pagina from '@/components/Pagina'
+import apiDeputados from '@/services/apiDeputados'
+import Link from 'next/link'
+import React, {  useEffect, useState } from 'react'
+import { Card, Col, Container, Dropdown, Form, Row } from 'react-bootstrap'
 
-const Deputados = ({ deputados }) => {
-  const [searchValue, setSearchValue] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('');
-  const [selectedValue, setSelectedValue] = useState('');
-  const [unidadesFederativas, setUnidadesFederativas] = useState([]);
 
-  // Extrai as unidades federativas dos dados dos deputados
-  useEffect(() => {
-    const ufSet = new Set(deputados.map(item => item.siglaUf));
-    const ufList = Array.from(ufSet).sort();
-    setUnidadesFederativas(ufList);
-  }, [deputados]);
 
-  // Filtra a lista de deputados com base no valor da pesquisa e no filtro selecionado
-  const filteredDeputados = deputados.filter(item =>
-    item.nome.toLowerCase().includes(searchValue.toLowerCase()) &&
-    (selectedFilter === '' || item[selectedFilter] === selectedValue || selectedValue === '')
-  );
+  const index = ({ deputados }) => {
 
-  // Atualiza o valor da pesquisa quando o usuário digita no campo de pesquisa
-  const handleSearchChange = (e) => {
-    setSearchValue(e.target.value);
-  };
+    const [searchValue, setSearchValue] = useState('');
+    const [selectedFilter, setSelectedFilter] = useState('');
+    const [selectedValue, setSelectedValue] = useState('');
+    const [unidadesFederativas, setUnidadesFederativas] = useState([]);
+  
+  
+  
+    // Filtra a lista de deputados com base no valor da pesquisa e no filtro selecionado
+    const filteredDeputados = deputados.filter(item =>
+      item.nome.toLowerCase().includes(searchValue.toLowerCase()) &&
+      (selectedFilter === '' || item[selectedFilter] === selectedValue || selectedValue === '')
+    );
+  
+    // Atualiza o valor da pesquisa quando o usuário digita no campo de pesquisa
+    const handleSearchChange = (e) => {
+      setSearchValue(e.target.value);
+    };
+  
+   
+  
+    const fetchDeputados = async (searchValue, filter, value) => {
+      try {
+        const resultado = await apiDeputados.get('/deputados', {
+          params: {
+            nome: searchValue,
+            [filter]: value
+          }
+        });
 
-  // Atualiza o filtro selecionado
-  const handleFilterSelect = (filter) => {
-    setSelectedFilter(filter);
-    setSelectedValue('');
-  };
 
-  // Atualiza o valor selecionado para o filtro selecionado
-  const handleValueSelect = (value) => {
-    setSelectedValue(value);
-  };
+        const deputadosPesquisados = resultado.data.dados;
+        setDeputados(deputadosPesquisados);
+          } catch (error) {
+            console.error(error);
+          }
+        };
 
-  return (
-    <Pagina titulo='Deputados'>
+    return (
+      <Pagina titulo='Deputados'>
+
       <Form className="d-flex">
         <Form.Control
           type="search"
@@ -52,70 +59,40 @@ const Deputados = ({ deputados }) => {
           style={{ marginBottom: "53px" }}
         />
         
-        <Dropdown onSelect={(eventKey) => handleFilterSelect(eventKey)}>
-          <Dropdown.Toggle variant="primary" id="dropdown-filter-button" style={{ marginRight: "10px", marginLeft: "2px" }}>
-            Filtrar
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item eventKey="">Todos</Dropdown.Item>
-            <Dropdown.Item eventKey="siglaUf">Estado</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-
-        {selectedFilter !== '' && (
-          <Dropdown onSelect={(eventKey) => handleValueSelect(eventKey)}>
-            <Dropdown.Toggle variant="primary" id="dropdown-value-button">
-              Selecionar Valor
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {unidadesFederativas.map(item => (
-                <Dropdown.Item
-                  key={item}
-                  eventKey={item}
-                >
-                  {item}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        )}
-
-        {selectedFilter !== '' && (
-          <div style={{ marginBottom: "30px", marginLeft: "10px" }}>
-            <Button variant="outline-primary" onClick={() => setSelectedFilter('')}>
-              Limpar Filtro
-            </Button>
-          </div>
-        )}
       </Form>
 
-      <Row md={4} xs={1} className="g-4">
-        {filteredDeputados.map(item => (
-          <Col key={item.id}>
-            <Card>
-              <Link href={'/deputados/' + item.id}>
-                <Card.Img src={item.urlFoto} />
-              </Link>
-              <Card.Body>
-                <Card.Title>{item.nome}</Card.Title>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
-    </Pagina>
-  );
-};
+        
+           <Row md={4} xs={1} className="g-4">
+    
+               {filteredDeputados.map(item => (
+                  <Col>
+                      <Card>
+                         <Card.Img variant="top"  src={item.urlFoto} class="rounded"></Card.Img>
+                         <Card.Body className='bg-success rounded-bottom'>
+                               <Card.Title>{item.nome}</Card.Title>
+                               <Container>
+                               <Link className='btn btn-success ms-5' href={'/deputados/' + item.id}>Detalhes</Link>
+                               </Container>
+                         </Card.Body>
 
-export default Deputados;
+                     </Card>
+                   </Col>
+    
+                ))}
+            </Row>
+  
+        </Pagina>
+     )
+}
 
-export async function getServerSideProps(context) {
-  const resultado = await apiDeputados.get("/deputados");
-  const deputados = resultado.data.dados;
+export default index
 
-  return {
-    props: {
-      deputados,
-    },
-  };
+export async function getServerSideProps(context){
+
+  const resultado = await apiDeputados.get ('/deputados/')
+  const deputados = resultado.data.dados
+
+  return{
+    props: { deputados },
+  }
 }

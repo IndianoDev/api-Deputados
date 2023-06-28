@@ -42,7 +42,7 @@ const Index = () => {
                 <Card.Title>{noticia.title}</Card.Title>
                 <Card.Text>{noticia.description}</Card.Text>
                 <div className="mt-auto">
-                  <Button variant="primary" href={noticia.url}>Ver mais</Button>
+                  <Button variant="success" href={noticia.url}>Ver mais</Button>
                 </div>
               </Card.Body>
             </Card>
